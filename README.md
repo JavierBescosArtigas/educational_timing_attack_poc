@@ -17,7 +17,7 @@ The statistical is simple, I will record the time spent to receive the *response
 
 
 >In this situation, the [central limit theorem](https://en.wikipedia.org/wiki/Central_limit_theorem) tells me that the variance should reduce with the sqrt(N) where N is the sample size (1000 in this case).
-![thanks wikipedia](IllustrationCentralTheorem.png) Of course, the variance is dependant on lot's of things (such as your cpu stability or server request variance time, ping...) but with a sufficient ammount of tries, you can make it unrelevant.
+![thanks wikipedia](IllustrationCentralTheorem.png) Of course, the variance is dependant on lots of things (such as your cpu stability or server request variance time, ping...) but with a sufficient ammount of tries, you can make it unrelevant.
 
 3. Even thought it is expected that the longer the user_input, the more time the server takes to process it, we should detect nevertheless the gap of succeding with the key_length.
 
