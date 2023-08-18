@@ -1,0 +1,3 @@
+*.txt # Ignore all .txt files
+.venv/ # Ignore the .venv directory
+venv/ # Ignore the venv directory		
