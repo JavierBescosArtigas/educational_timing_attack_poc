@@ -15,14 +15,17 @@ The statistical is simple, I will record the time spent to receive the *response
 1. I will measure the time and plot the distribution, **TimevsChar_length**.
 2. To reduce the variance I will make a 'huge' number of request per character_length (e.g. 100, 1000, 10000) and compute the average. 
 
-In this situation, the ![central limit theorem](https://en.wikipedia.org/wiki/Central_limit_theorem) tells me that the variance should reduce with the sqrt(N) where N is the character length (or something like that, my memory is not perfect).
+
+>In this situation, the [central limit theorem](https://en.wikipedia.org/wiki/Central_limit_theorem) tells me that the variance should reduce with the sqrt(N) where N is the sample size (1000 in this case).
+![thanks wikipedia](IllustrationCentralTheorem.png) Of course, the variance is dependant on lot's of things (such as your cpu stability or server request variance time, ping...) but with a sufficient ammount of tries, you can make it unrelevant.
+
 3. Even thought it is expected that the longer the user_input, the more time the server takes to process it, we should detect nevertheless the gap of succeding with the key_length.
 
 ALERT!!!: Super_simple POC (proof of concept), real situations should consider more factors like day-time of the request (to eliminate the bias of traffic time difference at different hours/week_days...)
 
 
 
-# Current code 
+# 'App' code 
 1. Application code, string comparison.
 ```python
 import sys
@@ -41,7 +44,7 @@ if __name__ == "__main__":
 2. Automating measure the time of the response
 ```shell
 start=$(date +%s.%N)
-python3 ./time.py $1 > /dev/null
+python3 ./app_simulated.py $1 > /dev/null #we don't need to see the output of the app, if any; only time spent
 end=$(date +%s.%N)
 #echo "Time taken: $(echo "$end - $start" | bc) seconds"
 echo "$end - $start" | bc
@@ -57,7 +60,7 @@ Here we get a *'representative sample of requests'* for 8 different lengths of c
 ---
 
 # Results
-
+So, to sum it up, we have tried 'only 1000 times, so we haven't even tried 10000 times (remember that [rockyou.txt wordlist](https://github.com/danielmiessler/SecLists) has more than **10 million passwords**)
 ```bash
 > wc -l results_z*
  1000 results_z.txt
@@ -69,5 +72,23 @@ Here we get a *'representative sample of requests'* for 8 different lengths of c
  1000 results_zzzzzzz.txt
  1000 results_zzzzzzzz.txt
  8000 total
-
 ```
+
+So, we have tried a trivial (easy to hide) amount of passwords, did we get anything?
+
+## Distribution of time of 'app response' when changing character size
+![](timing_attack_histogram.png)
+
+So it was true even with a small effort you can differenciate the password length!
+
+I want to make clear a bunch of things:
+1. The hypothetical situation doesn't apply when passwords are hashed (so all of them have the same length) but this is not only applicable to passwords but to any *secret* in the target system that is being used internally in a **string-comparison**.
+2. This technique can be used to discover the **key itselft character by character**: after comparing the key length, the code will compare each character 1 by 1 so, using the same principle; if it happends that you randomly guess the first character, the app will check the 2nd and so on (investing more time). So we would be able to discover the password by looking at the time the app needs to answer.
+3. As Abraham Lincoln said, *'Don't believe everything you read on the internet'*
+
+To fix this can even easier than applying this technique, you don't need a WAF or something expensive, just make the app to invest constant times when comparing important characters (defense in depth, you now).
+
+---
+### Notes
+* bc (used in the shell script) "is  a language that supports arbitrary precision numbers with interactive execution of statements." [Link](https://manpages.ubuntu.com/manpages/focal/en/man1/bc.1.html#:~:text=bc%20is%20a%20language%20that,defined%20before%20processing%20any%20files.)
+* Linkedin [Article](https://www.linkedin.com/pulse/timing-attack-educative-introduction-javier-besc%2525C3%2525B3s-artigas%3FtrackingId=bOGXTrd8Rje3PfOxwZntPA%253D%253D/?trackingId=bOGXTrd8Rje3PfOxwZntPA%3D%3D)
