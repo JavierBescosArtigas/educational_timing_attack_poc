@@ -14,7 +14,8 @@ The statistical is simple, I will record the time spent to receive the *response
 
 1. I will measure the time and plot the distribution, **TimevsChar_length**.
 2. To reduce the variance I will make a 'huge' number of request per character_length (e.g. 100, 1000, 10000) and compute the average. 
->In this situation, the central theorem of the limit tells me that the variance should reduce with the sqrt(N) where N is the character length (or something like that, my memory is not perfect).
+
+In this situation, the ![central limit theorem](https://en.wikipedia.org/wiki/Central_limit_theorem) tells me that the variance should reduce with the sqrt(N) where N is the character length (or something like that, my memory is not perfect).
 3. Even thought it is expected that the longer the user_input, the more time the server takes to process it, we should detect nevertheless the gap of succeding with the key_length.
 
 ALERT!!!: Super_simple POC (proof of concept), real situations should consider more factors like day-time of the request (to eliminate the bias of traffic time difference at different hours/week_days...)
