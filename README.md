@@ -86,7 +86,7 @@ I want to make clear a bunch of things:
 2. This technique can be used to discover the **key itselft character by character**: after comparing the key length, the code will compare each character 1 by 1 so, using the same principle; if it happends that you randomly guess the first character, the app will check the 2nd and so on (investing more time). So we would be able to discover the password by looking at the time the app needs to answer.
 3. As Abraham Lincoln said, *'Don't believe everything you read on the internet'*
 
-To fix this can even easier than applying this technique, you don't need a WAF or something expensive, just make the app to invest constant times when comparing important characters (defense in depth, you now).
+To fix this can even easier than applying this technique, you don't need a WAF or something expensive, just make the app to invest constant times when comparing important strings (defense in depth, you now).
 
 ---
 ### Notes
